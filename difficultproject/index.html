@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>chandigarh Neighborhood Map</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<style>
+	body {
+	height: 100%;
+
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #7cb9e8;
+	width: 100%;
+	
+  margin:0 auto;
+
+}
+p {
+  margin-top: 5px;
+  padding-top: 5px;
+  text-align: left;
+  color:green;
+  font-size: 25px;
+  
+}
+
+#map {
+	height: 600px;
+	width: 99%;
+}
+
+
+
+
+#inputvalue {
+  width: 90%;
+  margin-bottom: 20px;
+  text-indent: inherit;
+}
+
+.output_places {
+  width: 90%;
+	vertical-align: center;
+}
+
+a { 
+  
+  padding: 5px;
+	display:block; 
+	border:5px solid #00a877;
+  font-weight: bold; 
+}
+
+
+h1 {
+    color: #3d0c02;
+    font-size: 30px;
+    margin-bottom: 10px ;
+    line-height: 40px;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class ="container">
+	<div class="row ">
+
+		<header class="row">
+		<div class="col-xs-12 ">
+
+			<h1>Tricity Cinema's </h1>
+			
+		</div>
+		</header>
+		<div class="col-xs-6">
+			<p>List of Tricity Cinema's</p>
+		</div>
+
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-3">
+			
+			<div class="input_places">
+				<input id="inputvalue" type="text" class="form-control" placeholder="explore places" data-bind="value:place_input,valueUpdate:'afterkeydown',event:{keyup:refresh_List}">
+			</div>
+			<div class="output_places">
+				<ul data-bind="foreach: selected_place">
+					<li data-bind="css:{active:selection},text:placename,visible:show,click:$parent.doneMark">
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+		<div class="col-sm-9">
+			
+			<div id="map">
+			
+			</div>
+		
+		</div>
+
+	</div>
+
+</div>	<!--container-->
+<script src='js/knockout-3.4.2.js'></script>
+<script src='js/jquery-3.2.1.min.js'></script>
+<script src='js/app.js'></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAuhYgqotNbolRCLZ5ZxgtpD7vtqtuEXM&libraries=geometry&v=3&callback=initMap" onerror="errorHandling()"  async defer></script>
+</body>
