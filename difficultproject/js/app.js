@@ -203,7 +203,7 @@ var viewModel = function() {
 
   self.addApiInfo = function(counter_marker){
       $.ajax({
-        url: "https://api.foursquare.com/v2/venues/" + counter_marker.placeID + '?client_id=MHNQGZARQHKHVXJ0W2GO5BK3NZHOUJSHMTWL1YQEPMTXKJ01&client_secret=5SYVCHXBOGZZEOJ2BHT2QKT2TO4FKGTEL1TCDWE11VDGKQSF&v=20170527',
+        url: "https://api.foursquare.com/v2/venues/" + counter_marker.placeID + '?client_id=33RUTCVQOVXUZGPGME4T05JGXH010VRWMGVBKLKKVTZR52GK&client_secret=BIG1WPWORXNTJGB55HJ5XKRZYXVJDITSLJ12KFPMXAEBJILT&v=20170527',
         dataType: "json",
         success: function(data){
           // stores results to display likes and ratings
