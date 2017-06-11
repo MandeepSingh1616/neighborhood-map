@@ -1,80 +1,73 @@
 var models = [
           {
           	placename: 'Cinepolis:Jagat Mall',
-            placeID: "56cc65c8498e8ac698952d8c",
-            selecton: false,
+            cinemaID: "56cc65c8498e8ac698952d8c",
+            selection: false,
             show: true,
             lat:30.882620,
             lng:75.780959
           },
           {
           	placename: 'Piccadly Square',
-            placeID: "50a351abe4b0850330656105",
-            selecton: false,
+            cinemaID: "50a351abe4b0850330656105",
+            selection: false,
             show: true,
             lat:30.723490,
             lng:76.767508
           },
           {
           	placename: 'Wave:City Emporium Mall',
-            placeID: "50d43c3ce4b0621a680d3bf6",
-            selecton: false,
+            cinemaID: "50d43c3ce4b0621a680d3bf6",
+            selection: false,
             show: true,
             lat:30.709367,
             lng:76.801189
           },
           {
           	placename: 'PVR:Centra',
-            placeID: "4ccc5d0975dcbfb7d05ba764",
-            selecton: false,
+            cinemaID: "4ccc5d0975dcbfb7d05ba764",
+            selection: false,
             show: true,
             lat:30.707011,
             lng:76.796648
           },
           {
           	placename: 'PVR:Elante',
-            placeID: "51c480e1498e73948d26e8be",
-            selecton: false,
+            cinemaID: "51c480e1498e73948d26e8be",
+            selection: false,
             show: true,
             lat:30.705012,
             lng:76.802175
           },
-          {
-          	placename: 'Fun Cinemas:Republic Mall',
-            placeID: "",
-            selecton: false,
-            show: true,
-            lat:11.024142,
-            lng:77.010727
-          },
+          
           {
           	placename: 'DT City Centre',
-            placeID: "4b40c527f964a520eaba25e3",
-            selecton: false,
+            cinemaID: "4b40c527f964a520eaba25e3",
+            selection: false,
             show: true,
             lat:30.715352, 
             lng:76.825329
           },
           {
           	placename: 'Rajhans Cinemas',
-            placeID: "58d528a1da54ae3953b2f523",
-            selecton: false,
+            cinemaID: "58d528a1da54ae3953b2f523",
+            selection: false,
             show: true,
             lat:30.700217,
             lng:76.853221
           },
           {
           	placename: 'Carnival:Paras Mall',
-            placeID: "4da43e5463b5a35d20a4211a",
-            selecton: false,
+            cinemaID: "4da43e5463b5a35d20a4211a",
+            selection: false,
             show: true,
             lat:30.660098,
             lng:76.822071
           },
           {
           	placename: 'PVR:North Country Mall',
-            placeID: "5207dd7d8bbd2f9376e1dce0",
-            selecton: false,
+            cinemaID: "5207dd7d8bbd2f9376e1dce0",
+            selection: false,
             show: true,
             lat:30.736271,
             lng:76.679103
@@ -90,7 +83,7 @@ var models = [
 var viewModel = function() {
 
   var self = this;
-
+  self.error=ko.observable('');
   self.place_input = ko.observable('');
   self.selected_place = ko.observableArray([]);
  
@@ -105,9 +98,10 @@ var viewModel = function() {
               new google.maps.Size(21,34));
       return markerImage;
   };
-      var defaultIcon = self.makeMarkerIcon('0091ff');
+      var Icon = self.makeMarkerIcon('0091ff');
       var highlightedIcon = self.makeMarkerIcon('FF0000');
-
+      var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+      var myIcon = iconBase + "info-i_maps.png";
   
   models.forEach(function(counter){
 
@@ -115,18 +109,18 @@ var viewModel = function() {
         placename:counter.placename,
         position: {lat:counter.lat, lng:counter.lng},
         show: ko.observable(counter.show),  
-        placeID:counter.placeID,
+        cinemaID:counter.cinemaID,
         selection: ko.observable(counter.selection),
-        map: map,
         animation: google.maps.Animation.DROP,
-        icon: defaultIcon,
+        map: map,
+        icon: myIcon,
         id: 1
       });
 
       self.selected_place.push(marker);
       
       marker.addListener('mouseout', function(){
-      this.setIcon(defaultIcon);
+      this.setIcon(Icon);
       });
 
       marker.addListener('mouseover', function(){
@@ -137,6 +131,7 @@ var viewModel = function() {
       self.makeBounce(marker);
       self.populateInfoWindow(this, largeInfowindow);
       self.addApiInfo(marker);
+
       }); 
   });
       
@@ -147,12 +142,12 @@ var viewModel = function() {
 
   self.populateInfoWindow = function(marker, infowindow) {
     
-      // Check to make sure the infowindow is not already opened on this marker.
+      // Check  infowindow is not already opened through marker.
       if (infowindow.marker != marker) {
-        // Clear the infowindow content to give the streetview time to load.
+        // Clear the infowindow content streetview to load.
         infowindow.setContent();
         infowindow.marker = marker;
-        // Make sure the marker property is cleared if the infowindow is closed.
+        //  marker property is cleared if  infowindow is closed.
         infowindow.addListener('closeclick', function() {
           if(infowindow.marker != null)
                infowindow.marker.setAnimation(null);
@@ -200,16 +195,18 @@ var viewModel = function() {
       }
 
   };
+  self.makeBounce = function(counter_marker){
+    counter_marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){counter_marker.setAnimation(null);},700);
+  };
 
   self.addApiInfo = function(counter_marker){
       $.ajax({
-        url: "https://api.foursquare.com/v2/venues/" + counter_marker.placeID + '?client_id=33RUTCVQOVXUZGPGME4T05JGXH010VRWMGVBKLKKVTZR52GK&client_secret=BIG1WPWORXNTJGB55HJ5XKRZYXVJDITSLJ12KFPMXAEBJILT&v=20170527',
+        url: "https://api.foursquare.com/v2/venues/" + counter_marker.cinemaID + '?client_id=33RUTCVQOVXUZGPGME4T05JGXH010VRWMGVBKLKKVTZR52GK&client_secret=BIG1WPWORXNTJGB55HJ5XKRZYXVJDITSLJ12KFPMXAEBJILT&v=20170527',
         dataType: "json",
         success: function(data){
-          // stores results to display likes and ratings
+          
           var out = data.response.venue;
-
-          // add likes and ratings to marker
           counter_marker.likes = out.hasOwnProperty('likes') ? out.likes.summary: "";
           counter_marker.rating = out.hasOwnProperty('rating') ? out.rating: "";
           infowindow.setContent('<div>' + counter_marker.placename + '</div><p>' +
@@ -220,6 +217,9 @@ var viewModel = function() {
           	streetViewService.getPanoramaByLocation(counter_marker.position, radius, self.getStreetView);
           infowindow.open(map, counter_marker);
         },
+        error:function(e){
+        	self.error("Foursquae data is invalid,Please Try Again ");
+        }
       });
   };
 
@@ -228,66 +228,29 @@ var viewModel = function() {
     self.addApiInfo(counter_marker);
      counter_marker.addListener('click', function()
      {
-      self.doneMark(counter_marker);
+      self.dMark(counter_marker);
       });
-    })(self.selected_place[counter]);
+    })(self.selected_place()[counter]);
   }
 
-  self.makeBounce = function(counter_marker){
-    counter_marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){counter_marker.setAnimation(null);},700);
+   
+
+
+  self.dMark = function(marker) {
+
+   google.maps.event.trigger(marker,'click');
   };
-
-
-  self.doneMark = function(location) {
-
-    for (var counter = 0; counter < self.no_places;counter ++) {
-      self.selected_place[counter].selection(false);
-    }
-
-      location.selection(true);
-      self.current_location = location;
-
-      formattedLikes = function() {
-        if (self.current_location.likes === "" || self.current_location.likes === undefined) {
-          return "no_likes";
-        } 
-        else {
-          return "Location has " + self.current_location.likes;
-        }
-      };
-
-      formattedRating = function() {
-        if (self.current_location.rating === "" || self.current_location.rating === undefined) {
-          return "no_ratings";
-        } 
-        else {
-          return "location rating is " + self.current_location.rating;
-        }
-      };
-var formattedInfoWindow = "<h5>" + self.current_location.title + "</h5>" + "<div>" + formattedLikes() + "</div>" + "<div>" + formattedRating() + "</div>";
-      infowindow.setContent(formattedInfoWindow);
-        infowindow.open(map, location);
-       self.makeBounce(location);
-  };
-
-
-  self.refresh_List = function() {
-      
-      var place_input=self.place_input();
-      infowindow.close();
-
-      if(place_input.length == 0) {
-        for (var counter = 0; counter < self.selected_place().length; counter ++) {
+  self.display_full=function(){
+  	for (var counter = 0; counter < self.selected_place().length; counter ++) {
           
           self.selected_place()[counter].setVisible(true);
           self.selected_place()[counter].show(true);
         } 
-      } 
-      
-      else {
-       for (var counter = 0; counter < self.selected_place().length; counter ++) {
-          if (self.selected_place()[counter].placename.toLowerCase().indexOf(place_input.toLowerCase()) > -1) {
+
+  };
+  self.display_refreshed=function(temp_input){
+  		for (var counter = 0; counter < self.selected_place().length; counter ++) {
+          if (self.selected_place()[counter].placename.toLowerCase().indexOf(temp_input.toLowerCase()) > -1) {
            self.selected_place()[counter].show(true);
            self.selected_place()[counter].setVisible(true);
           } 
@@ -296,6 +259,19 @@ var formattedInfoWindow = "<h5>" + self.current_location.title + "</h5>" + "<div
           self.selected_place()[counter].setVisible(false);
           }
        }
+  };
+
+  self.refresh_List = function() {
+      
+      var temp_input=self.place_input();
+      infowindow.close();
+
+      if(temp_input.length == 0) {
+        	self.display_full();
+      } 
+      
+      else {
+       		 self.display_refreshed(temp_input);
       }
           
       infowindow.close();
