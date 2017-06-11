@@ -4,8 +4,8 @@
 	<meta charset="utf-8">
 	<title>chandigarh Neighborhood Map</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
 	<style>
 	body {
 	height: 100%;
@@ -31,7 +31,10 @@ p {
   font-size: 25px;
   
 }
-
+		
+li:hover {
+  text-decoration: underline;
+}
 #map {
 	height: 600px;
 	width: 99%;
@@ -95,8 +98,8 @@ h1 {
 				<input id="inputvalue" type="text" class="form-control" placeholder="explore places" data-bind="value:place_input,valueUpdate:'afterkeydown',event:{keyup:refresh_List}">
 			</div>
 			<div class="output_places">
-				<ul data-bind="foreach: selected_place">
-					<li data-bind="css:{active:selection},text:placename,visible:show,click:$parent.doneMark">
+				<ul class="list-group" data-bind="foreach: selected_place">
+					<li class="list-group-item" data-bind="css:{active:selection},text:placename,visible:show,click:$parent.doneMark">
 					</li>
 				</ul>
 			</div>
