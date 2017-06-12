@@ -86,7 +86,8 @@ var viewModel = function() {
   self.error=ko.observable('');
   self.place_input = ko.observable('');
   self.selected_place = ko.observableArray([]);
- 
+ //This function take in color  and then create a new marker
+
   self.makeMarkerIcon = function(markerColor) {
       
       var markerImage = new google.maps.MarkerImage(
@@ -98,7 +99,7 @@ var viewModel = function() {
               new google.maps.Size(21,34));
       return markerImage;
   };
-      var Icon = self.makeMarkerIcon('0091ff');
+      
       var highlightedIcon = self.makeMarkerIcon('FF0000');
       var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
       var myIcon = iconBase + "info-i_maps.png";
@@ -120,7 +121,7 @@ var viewModel = function() {
       self.selected_place.push(marker);
       
       marker.addListener('mouseout', function(){
-      this.setIcon(Icon);
+      this.setIcon(myIcon);
       });
 
       marker.addListener('mouseover', function(){
@@ -136,27 +137,6 @@ var viewModel = function() {
   });
       
       var largeInfowindow = new google.maps.InfoWindow();
-	var drawingManager= new google.maps.drawing.DrawingManager({
-      	drawingMode:google.maps.drawing.OverlayType.POLYGON,
-      	drawingControl:true,
-      	drawingControlOptions: {
-      		position:google.maps.ControlPosition.TOP_LEFT,
-      		drawingModes: [
-      			google.maps.drawing.OverlayType.POLYGON
-      		]
-      	}
-      });
-
-
-      self.toggleDrawing=function(drawingManager){
-      		if(drawingManager.map){
-      			drawingManager.setMap(null);
-      		}
-      		else{
-      			drawingManager.setMap(map);
-      		}
-      };
-      
       self.no_places = self.selected_place.length;
       self.current_place = self.selected_place[0];
 
@@ -227,8 +207,8 @@ var viewModel = function() {
         success: function(data){
           
           var out = data.response.venue;
-          counter_marker.likes = out.hasOwnProperty('likes') ? out.likes.summary: "";
-          counter_marker.rating = out.hasOwnProperty('rating') ? out.rating: "";
+          counter_marker.likes = out.hasOwnProperty('likes') ? out.likes.summary: "No info available";
+          counter_marker.rating = out.hasOwnProperty('rating') ? out.rating: "No info Available";
           infowindow.setContent('<div>' + counter_marker.placename + '</div><p>' +
   			counter_marker.likes + '</p><p>Rating: ' +
   			counter_marker.rating +'</p><div id="pano"></div>');
@@ -260,6 +240,9 @@ var viewModel = function() {
 
    google.maps.event.trigger(marker,'click');
   };
+
+
+
   self.display_full=function(){
   	for (var counter = 0; counter < self.selected_place().length; counter ++) {
           
@@ -304,6 +287,7 @@ var map;
 var infoWindow;
     
 function initMap() {
+	//create a style array to use with the map.
 	var styles = [
           {
             featureType: 'road.highway',
