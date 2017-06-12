@@ -136,6 +136,26 @@ var viewModel = function() {
   });
       
       var largeInfowindow = new google.maps.InfoWindow();
+	var drawingManager= new google.maps.drawing.DrawingManager({
+      	drawingMode:google.maps.drawing.OverlayType.POLYGON,
+      	drawingControl:true,
+      	drawingControlOptions: {
+      		position:google.maps.ControlPosition.TOP_LEFT,
+      		drawingModes: [
+      			google.maps.drawing.OverlayType.POLYGON
+      		]
+      	}
+      });
+
+
+      self.toggleDrawing=function(drawingManager){
+      		if(drawingManager.map){
+      			drawingManager.setMap(null);
+      		}
+      		else{
+      			drawingManager.setMap(map);
+      		}
+      };
       
       self.no_places = self.selected_place.length;
       self.current_place = self.selected_place[0];
